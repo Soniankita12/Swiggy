@@ -6,6 +6,7 @@ const User = (props)=>{
             <h1>Count : {count}</h1>
             <h3>{props.name}</h3>
             <h4>{props.location}</h4>
+            
         </div>
     );
 };
