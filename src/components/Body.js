@@ -1,4 +1,4 @@
-import RestaurantCard from "./RestaurantCard";
+import RestaurantCard ,{withPromotedLabel} from "./RestaurantCard";
 import { useState , useEffect } from "react";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
@@ -12,14 +12,14 @@ const Body = ()=>{
     useEffect(()=>{
         fetchData();
     },[]);
+    const RestaurantCardPromoted = withPromotedLabel(RestaurantCard);
 
     const fetchData = async ()=>{
         const data = await fetch("https://corsproxy.org/?https%3A%2F%2Fwww.swiggy.com%2Fdapi%2Frestaurants%2Flist%2Fv5%3Flat%3D28.4089123%26lng%3D77.3177894%26is-seo-homepage-enabled%3Dtrue%26page_type%3DDESKTOP_WEB_LISTING");
 
         const json = await data.json();
-       
-    setListOfRestaurants(json?.data?.cards[3]?.card?.card?.gridElements?.infoWithStyle?.restaurants || json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
-    setFilteredRestaurants(json?.data?.cards[3]?.card?.card?.gridElements?.infoWithStyle?.restaurants || json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
+        setListOfRestaurants(json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
+    setFilteredRestaurants(json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants || json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
     };
 
     const onlineStatus = useOnlineStatus();
@@ -63,7 +63,9 @@ const Body = ()=>{
             <div className="flex flex-wrap">
                 {
                     filteredRestaurant.map((restaurant) => (
-              <Link key ={restaurant.info.id} to={"restaurants/" + restaurant.info.id }><RestaurantCard resData={restaurant} /></Link>
+              <Link key ={restaurant.info.id} to={"restaurants/" + restaurant.info.id }>
+              {restaurant?.info?.veg ? (<RestaurantCardPromoted resData = {restaurant}/>) : (<RestaurantCard resData = {restaurant}/>) }
+                </Link>
             ))}
 
             </div>
