@@ -28,12 +28,15 @@ const Body = ()=>{
             <h1>Looks like you're offline . Plz check your internet !!</h1>
     )
 
-    return listOfRestaurants.length === 0 ? (<Shimmer/>)
-     : (
+    if (listOfRestaurants?.length === 0) {
+        return <Shimmer />
+    }
+
+    return(
         <div className="body">
             <div className="filter flex">
                 <div className="search p-4 m-4">
-                    <input type="text" className="border border-solid border-black" value={searchText} onChange={(e)=>{
+                    <input type="text" data-testid="searchInput" className="border border-solid border-black" value={searchText} onChange={(e)=>{
                         setSearchText(e.target.value);
                     }}/>
                     <button className="px-4 py-2 bg-green-100 m-4 rounded-lg cursor-pointer" onClick={()=>{
@@ -48,7 +51,7 @@ const Body = ()=>{
                 <button className="px-4 py-2 bg-gray-50 rounded-lg cursor-pointer"
                  onClick={()=>{
                     const filteredList = listOfRestaurants.filter(
-                    (res)=>res.info.avgRating > 2
+                    (res)=>res.info.avgRating > 3.9
                 );
 
                 setListOfRestaurants(filteredList);
@@ -62,8 +65,8 @@ const Body = ()=>{
             </div>
             <div className="flex flex-wrap">
                 {
-                    filteredRestaurant.map((restaurant) => (
-              <Link key ={restaurant.info.id} to={"restaurants/" + restaurant.info.id }>
+                    filteredRestaurant?.map((restaurant,index) => (
+              <Link key ={index} to={"restaurants/" + restaurant.info.id }>
               {restaurant?.info?.avgRating > 4.2 ? (<RestaurantCardPromoted resData = {restaurant}/>) : (<RestaurantCard resData = {restaurant}/>) }
                 </Link>
             ))}
